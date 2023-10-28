@@ -1,11 +1,13 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './assets/globals.css';
+import { ThemeProvider } from '@/components/theme-provider';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'Faceit Pocket Stats',
+  icons: { icon: '/favicon.ico' },
   description:
     "Welcome to Faceit Pocket Stats, your personal gateway to a world of competitive gaming data. Here, you can delve into the intricate statistics of your Faceit gaming journey, empowering you to enhance your skills and strategy. Whether you're a seasoned esports aficionado or a casual gamer looking to up your game, our platform is your portal to an array of insights and tools.\n" +
     '\n' +
@@ -21,7 +23,16 @@ export default function RootLayout({
 }) {
   return (
     <html lang='en'>
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <ThemeProvider
+          attribute='class'
+          defaultTheme='dark'
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
