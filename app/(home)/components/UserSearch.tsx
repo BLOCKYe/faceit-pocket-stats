@@ -67,7 +67,7 @@ const UserSearch: React.FC = (props) => {
   };
 
   return (
-    <div className={'mt-10 md:mt-20'}>
+    <div className={'mt-10'}>
       <h3 className={'text-sm text-muted-foreground'}>
         Find players statistics by nickname or steam profile
       </h3>

@@ -6,7 +6,10 @@ const HomeScreen: React.FC = (props) => {
   return (
     <MainWrapper>
       <section>
-        <h3 className={'mt-10 text-3xl font-bold md:text-center md:text-5xl'}>
+        <h3
+          className={
+            'mt-10 text-3xl font-bold md:mt-20 md:text-center md:text-5xl'
+          }>
           Faceit Pocket Stats
         </h3>
         <p className={'mx-auto mt-5 text-sm md:max-w-xl md:text-center'}>
