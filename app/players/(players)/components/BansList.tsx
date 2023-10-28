@@ -9,6 +9,7 @@ interface IBansListProps {
 }
 
 const BansList: React.FC<IBansListProps> = ({ bans }) => {
+  console.log(bans);
   return (
     <div>
       <h3>Bans</h3>
@@ -19,7 +20,7 @@ const BansList: React.FC<IBansListProps> = ({ bans }) => {
       <div className={'mt-3 grid gap-3'}>
         {bans?.items?.map((ban: BanItemType) => (
           <BanItem
-            key={moment(ban.ends_at).format(defaultDateTimeFormat)}
+            key={moment(ban.starts_at).format(defaultDateTimeFormat)}
             ban={ban}
           />
         ))}

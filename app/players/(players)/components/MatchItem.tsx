@@ -73,7 +73,7 @@ const MatchItem: React.FC<IMatchItemProps> = ({ match }) => {
       className={
         'grid cursor-pointer grid-cols-2 items-center gap-3 rounded border bg-zinc-900 p-3 text-xs transition-all hover:border-zinc-600 md:grid-cols-4 md:py-2'
       }>
-      <p className={'text-lg md:text-sm'}>
+      <p className={'text-sm'}>
         {moment(match.stats['Updated At']).format(defaultDateTimeFormat)}
       </p>
       <p className={'text-end text-muted-foreground md:text-center'}>
