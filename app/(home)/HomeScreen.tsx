@@ -6,10 +6,10 @@ const HomeScreen: React.FC = (props) => {
   return (
     <MainWrapper>
       <section>
-        <h3 className={'mt-10 text-center text-5xl font-bold'}>
+        <h3 className={'mt-10 text-3xl font-bold md:text-center md:text-5xl'}>
           Faceit Pocket Stats
         </h3>
-        <p className={'mx-auto mt-5 max-w-xl text-center text-sm'}>
+        <p className={'mx-auto mt-5 text-sm md:max-w-xl md:text-center'}>
           Faceit Pocket Stats is your ultimate gaming data hub. Whether
           you&apos;re a pro or a casual gamer, access key stats, compare
           performance, and challenge yourself. Join now to level up your gaming
@@ -18,7 +18,7 @@ const HomeScreen: React.FC = (props) => {
         </p>
       </section>
 
-      <section>
+      <section className={'mx-auto md:max-w-xl'}>
         <UserSearch />
       </section>
     </MainWrapper>

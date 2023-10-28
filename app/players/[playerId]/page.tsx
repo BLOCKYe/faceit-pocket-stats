@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import PlayerScreen from '@/app/players/(players)/PlayerScreen';
 import {
   HydrationBoundary,
@@ -10,6 +10,7 @@ import {
   getPlayerById,
   getPlayerMatches,
 } from '@/repository/PlayerRepository';
+import MainWrapper from '@/app/(common)/components/wrappers/MainWrapper';
 
 interface IPageProps {
   params: { playerId: string };
@@ -34,7 +35,14 @@ const Page: React.FC<IPageProps> = async (props) => {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <PlayerScreen playerId={props.params.playerId} />
+      <Suspense
+        fallback={
+          <MainWrapper>
+            <h3 className={'mt-10 text-center text-3xl'}>Loading...</h3>
+          </MainWrapper>
+        }>
+        <PlayerScreen playerId={props.params.playerId} />
+      </Suspense>
     </HydrationBoundary>
   );
 };

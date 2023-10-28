@@ -9,7 +9,6 @@ interface IBansListProps {
 }
 
 const BansList: React.FC<IBansListProps> = ({ bans }) => {
-  console.log(bans);
   return (
     <div>
       <h3>Bans</h3>
