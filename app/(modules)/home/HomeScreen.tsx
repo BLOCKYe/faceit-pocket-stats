@@ -10,10 +10,11 @@ const HomeScreen: React.FC = (props) => {
           Faceit Pocket Stats
         </h3>
         <p className={'mt-5 max-w-xl text-center text-sm'}>
-          Faceit Pocket Stats is your ultimate gaming data hub. Whether you're a
-          pro or a casual gamer, access key stats, compare performance, and
-          challenge yourself. Join now to level up your gaming journey through
-          data-driven <b className={'text-amber-400'}>success</b>.
+          Faceit Pocket Stats is your ultimate gaming data hub. Whether
+          you&apos;re a pro or a casual gamer, access key stats, compare
+          performance, and challenge yourself. Join now to level up your gaming
+          journey through data-driven{' '}
+          <b className={'text-amber-400'}>success</b>.
         </p>
       </section>
 
