@@ -1,5 +1,5 @@
-import HomeScreen from '@/app/(modules)/home/HomeScreen';
+import HomeScreen from '@/app/(home)/HomeScreen';
 
-export default function Home() {
+export default async function Home() {
   return <HomeScreen />;
 }

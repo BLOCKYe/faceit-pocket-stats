@@ -1,6 +1,6 @@
 import React from 'react';
 import MainWrapper from '@/app/(common)/components/wrappers/MainWrapper';
-import UserSearch from '@/app/(modules)/home/components/UserSearch';
+import UserSearch from '@/app/(home)/components/UserSearch';
 
 const HomeScreen: React.FC = (props) => {
   return (
@@ -9,7 +9,7 @@ const HomeScreen: React.FC = (props) => {
         <h3 className={'mt-10 text-center text-5xl font-bold'}>
           Faceit Pocket Stats
         </h3>
-        <p className={'mt-5 max-w-xl text-center text-sm'}>
+        <p className={'mx-auto mt-5 max-w-xl text-center text-sm'}>
           Faceit Pocket Stats is your ultimate gaming data hub. Whether
           you&apos;re a pro or a casual gamer, access key stats, compare
           performance, and challenge yourself. Join now to level up your gaming
