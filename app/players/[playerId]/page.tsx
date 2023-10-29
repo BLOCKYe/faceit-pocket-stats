@@ -16,7 +16,7 @@ interface IPageProps {
   params: { playerId: string };
 }
 
-const Page: React.FC<IPageProps> = async (props) => {
+const PlayerPage: React.FC<IPageProps> = async (props) => {
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery({
     queryKey: ['player', props.params.playerId],
@@ -46,4 +46,4 @@ const Page: React.FC<IPageProps> = async (props) => {
     </HydrationBoundary>
   );
 };
-export default Page;
+export default PlayerPage;

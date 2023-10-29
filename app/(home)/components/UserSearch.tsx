@@ -86,14 +86,15 @@ const UserSearch: React.FC = (props) => {
           variant={'secondary'}
           type={'submit'}
           className={'rounded-l-none'}
-          disabled={mutation.isPending}>
+          disabled={mutation.isPending}
+          data-testid={'submit-button'}>
           <BiSearch className={'mr-1'} />
           {mutation.isPending ? 'Searching...' : 'Search'}
         </Button>
       </form>
 
       {/* <--- Display error ---> */}
-      <p className={'mt-2 text-xs text-pink-600'}>
+      <p className={'mt-2 text-xs text-pink-600'} data-testid={'error-message'}>
         {form.formState.errors.searchValue?.message}
       </p>
     </div>

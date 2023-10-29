@@ -27,6 +27,14 @@ npm run check-types ||
     false;
 )
 
+# Testing all stuff
+npm run test ||
+(
+    echo '🙅‍♂️🙅‍♂️🙅‍♂️ Failed test. 🙅‍♂️🙅‍♂️🙅‍♂️
+            Are you seriously trying to write that?'
+    false;
+)
+
 # If everything passes... Now we can commit
 echo '🤔🤔🤔🤔... Alright... Code looks good to me... Trying to build now. 🤔🤔🤔🤔'
 
