@@ -4,6 +4,8 @@ import './assets/globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
 import ReactQueryProviders from '@/components/ReactQueryProviders';
 import { Toaster } from '@/components/ui/toaster';
+import MainWrapper from '@/app/(common)/components/wrappers/MainWrapper';
+import React, { Suspense } from 'react';
 
 const inter = Inter({ subsets: ['latin'] });
 

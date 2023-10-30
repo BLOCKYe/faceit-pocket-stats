@@ -10,7 +10,6 @@ import {
   getPlayerById,
   getPlayerMatches,
 } from '@/repository/PlayerRepository';
-import MainWrapper from '@/app/(common)/components/wrappers/MainWrapper';
 
 interface IPageProps {
   params: { playerId: string };
@@ -35,14 +34,7 @@ const PlayerPage: React.FC<IPageProps> = async (props) => {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <Suspense
-        fallback={
-          <MainWrapper>
-            <h3 className={'mt-10 text-center text-3xl'}>Loading...</h3>
-          </MainWrapper>
-        }>
-        <PlayerScreen playerId={props.params.playerId} />
-      </Suspense>
+      <PlayerScreen playerId={props.params.playerId} />
     </HydrationBoundary>
   );
 };

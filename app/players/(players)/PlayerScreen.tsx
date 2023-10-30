@@ -68,8 +68,17 @@ const PlayerScreen: React.FC<IPlayerScreenProps> = (props) => {
       <UserSearch />
 
       {/* <--- Profile header ---> */}
-      <section className={'mt-3 rounded-md border p-5'}>
+      <section
+        className={'relative mt-3 overflow-hidden rounded-md border p-5'}>
         <ProfileHeader player={player.data} />
+        <div
+          className={'absolute left-0 top-0 -z-10 h-full w-full opacity-20'}
+          style={{
+            backgroundImage: `url(${player.data.cover_image})`,
+            backgroundSize: 'cover',
+            backgroundRepeat: 'no-repeat',
+          }}
+        />
       </section>
 
       <section className={'mt-3 rounded-md border p-5'}>

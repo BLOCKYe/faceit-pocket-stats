@@ -7,17 +7,20 @@ import { BsSteam } from 'react-icons/bs';
 import { SiFaceit } from 'react-icons/si';
 import moment from 'moment';
 import { defaultDateFormat } from '@/constants/dateFormat';
+import { GiJusticeStar } from 'react-icons/gi';
+import { MdStars } from 'react-icons/md';
 
 interface IProfileHeaderProps {
   player: PlayerDataType;
 }
 
 const ProfileHeader: React.FC<IProfileHeaderProps> = ({ player }) => {
+  console.log(player);
   return (
     <>
       <div className={'flex flex-wrap items-center gap-5'}>
         <Image
-          src={player?.avatar}
+          src={player?.avatar || '/default_avatar.png'}
           alt={player?.nickname}
           width={80}
           height={80}
@@ -25,7 +28,13 @@ const ProfileHeader: React.FC<IProfileHeaderProps> = ({ player }) => {
           priority
         />
         <div>
-          <h3 className={'text-3xl font-bold'}>{player?.nickname}</h3>
+          <div className={'flex items-start gap-2'}>
+            <h3 className={'text-3xl font-bold'}>{player?.nickname}</h3>
+            {player.memberships.includes('premium') && (
+              <MdStars className={'text-md mt-1 text-yellow-500'} />
+            )}
+          </div>
+
           <p className={'mt-2 text-xs text-muted-foreground'}>
             joined {moment(player.activated_at).format(defaultDateFormat)}
           </p>
