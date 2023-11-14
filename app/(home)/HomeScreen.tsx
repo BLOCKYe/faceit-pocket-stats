@@ -16,12 +16,11 @@ const HomeScreen: React.FC = (props) => {
           Faceit Pocket Stats is your ultimate gaming data hub. Whether
           you&apos;re a pro or a casual gamer, access key stats, compare
           performance, and challenge yourself. Join now to level up your gaming
-          journey through data-driven{' '}
-          <b className={'text-amber-400'}>success</b>.
+          journey through data-driven success.
         </p>
       </section>
 
-      <section className={'mx-auto md:max-w-xl'}>
+      <section className={'mx-auto md:mt-20 md:max-w-xl'}>
         <UserSearch />
       </section>
     </MainWrapper>

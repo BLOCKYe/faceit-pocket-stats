@@ -15,7 +15,6 @@ interface IProfileHeaderProps {
 }
 
 const ProfileHeader: React.FC<IProfileHeaderProps> = ({ player }) => {
-  console.log(player);
   return (
     <>
       <div className={'flex flex-wrap items-center gap-5'}>

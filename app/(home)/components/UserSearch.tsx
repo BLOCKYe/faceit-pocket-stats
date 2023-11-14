@@ -7,10 +7,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { useMutation } from '@tanstack/react-query';
-import { getPlayer } from '@/repository/PlayerRepository';
+import { getPlayer, searchPlayers } from '@/repository/PlayerRepository';
 import { BiSearch } from 'react-icons/bi';
 import PATHS from '@/constants/Paths';
 import { useRouter } from 'next/navigation';
+import { useDebouncedCallback } from '@/hooks/useDebouncesCallback';
+import { useToast } from '@/components/ui/use-toast';
 
 const SearchSchema = z.object({
   searchValue: z.string().min(2, {
@@ -39,14 +41,21 @@ const searchQueryFactory = (value: string): string => {
 
 const UserSearch: React.FC = (props) => {
   const router = useRouter();
+  const { toast } = useToast();
 
-  const mutation = useMutation({
+  const getInfoMutation = useMutation({
     mutationFn: (nickname: string) => getPlayer(nickname),
     onSuccess: (data) => router.push(PATHS.PLAYERS.PLAYER_ID(data.player_id)),
     onError: () =>
       form.setError('searchValue', {
         message: 'A player with the specified name was not found.',
       }),
+  });
+
+  const searchPlayerMutation = useMutation({
+    mutationFn: (nickname: string) => searchPlayers(nickname),
+    onSuccess: (data) => console.log(data),
+    onError: () => toast({ title: 'Player not found' }),
   });
 
   const form = useForm<z.infer<typeof SearchSchema>>({
@@ -63,8 +72,15 @@ const UserSearch: React.FC = (props) => {
    */
   const handleSubmit = (data: z.infer<typeof SearchSchema>) => {
     const value = searchQueryFactory(data.searchValue);
-    mutation.mutate(value);
+    getInfoMutation.mutate(value);
   };
+
+  /**
+   * This function is used search player on debounce
+   */
+  const handleDebounceSearch = useDebouncedCallback((value) => {
+    searchPlayerMutation.mutate(value);
+  }, 700);
 
   return (
     <div className={'mt-10'}>
@@ -81,15 +97,16 @@ const UserSearch: React.FC = (props) => {
           placeholder='Player nickname / steam profile link...'
           className={'rounded-r-none'}
           {...form.register('searchValue')}
+          onChange={(e) => handleDebounceSearch(e.target.value)}
         />
         <Button
           variant={'secondary'}
           type={'submit'}
           className={'rounded-l-none'}
-          disabled={mutation.isPending}
+          disabled={getInfoMutation.isPending}
           data-testid={'submit-button'}>
           <BiSearch className={'mr-1'} />
-          {mutation.isPending ? 'Searching...' : 'Search'}
+          {getInfoMutation.isPending ? 'Searching...' : 'Search'}
         </Button>
       </form>
 

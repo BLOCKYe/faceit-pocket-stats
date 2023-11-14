@@ -27,18 +27,6 @@ describe('HomeScreen', () => {
     expect(header).toBeInTheDocument(); // ASSERT
   });
 
-  it('should contain the text "success"', () => {
-    render(
-      <QueryClientProvider client={queryClient}>
-        <HomeScreen />
-      </QueryClientProvider>
-    ); // ARRANGE
-
-    const element = screen.getByText('success'); // ACTION
-
-    expect(element).toBeInTheDocument(); // ASSERT
-  });
-
   it('should have search player input', () => {
     render(
       <QueryClientProvider client={queryClient}>

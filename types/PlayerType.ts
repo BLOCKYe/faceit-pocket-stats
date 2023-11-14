@@ -53,3 +53,29 @@ export const PlayerDataTypeSchema = z.object({
   activated_at: z.coerce.date(),
 });
 export type PlayerDataType = z.infer<typeof PlayerDataTypeSchema>;
+
+export const SearchPlayerGameSchema = z.object({
+  name: z.string(),
+  skill_level: z.string(),
+});
+export type SearchPlayerGameType = z.infer<typeof SearchPlayerGameSchema>;
+
+export const SearchPlayerSchema = z.object({
+  avatar: z.string(),
+  country: z.string(),
+  games: z.array(SearchPlayerGameSchema),
+  nickname: z.string(),
+  player_id: z.string(),
+  status: z.string(),
+  verified: z.boolean(),
+});
+export type SearchPlayerType = z.infer<typeof SearchPlayerSchema>;
+
+export const SearchPlayerResponseSchema = z.object({
+  end: z.number(),
+  items: z.array(SearchPlayerSchema),
+  start: z.number(),
+});
+export type SearchPlayerResponseType = z.infer<
+  typeof SearchPlayerResponseSchema
+>;

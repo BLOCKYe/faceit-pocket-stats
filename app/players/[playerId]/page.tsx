@@ -10,6 +10,7 @@ import {
   getPlayerById,
   getPlayerMatches,
 } from '@/repository/PlayerRepository';
+import Spinner from '@/app/(common)/components/ui/Spinner/Spinner';
 
 interface IPageProps {
   params: { playerId: string };
@@ -33,9 +34,20 @@ const PlayerPage: React.FC<IPageProps> = async (props) => {
   });
 
   return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      <PlayerScreen playerId={props.params.playerId} />
-    </HydrationBoundary>
+    <Suspense
+      fallback={
+        <div
+          className={
+            'grid min-h-screen w-full place-content-center place-items-center'
+          }>
+          <Spinner />
+          <div className={'text-sm text-muted-foreground'}>LOADING DATA</div>
+        </div>
+      }>
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <PlayerScreen playerId={props.params.playerId} />
+      </HydrationBoundary>
+    </Suspense>
   );
 };
 export default PlayerPage;
