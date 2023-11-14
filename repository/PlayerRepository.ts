@@ -7,6 +7,7 @@ import {
 } from '@/types/PlayerType';
 import { MatchDataType } from '@/types/MatchTypes';
 import { BanDataType } from '@/types/BanTypes';
+import GamesEnum from '@/constants/gamesEnum';
 
 /**
  * This function is used to
@@ -42,15 +43,16 @@ export const getPlayerById = async (
  * @param playerId
  * @param start
  * @param limit
+ * @param game
  */
 export const getPlayerMatches = async (
   playerId: string,
   start: number,
-  limit: number
+  limit: number,
+  game: GamesEnum
 ): Promise<MatchDataType> => {
-  const GAME_ID = 'cs2';
   const response = await httpClient.get<MatchDataType>(
-    `/players/${playerId}/games/${GAME_ID}/stats?offset=${start}&limit=${limit}`
+    `/players/${playerId}/games/${game}/stats?offset=${start}&limit=${limit}`
   );
   return response.data;
 };

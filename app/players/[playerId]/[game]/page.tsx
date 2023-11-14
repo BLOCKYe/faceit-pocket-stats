@@ -11,27 +11,37 @@ import {
   getPlayerMatches,
 } from '@/repository/PlayerRepository';
 import Spinner from '@/app/(common)/components/ui/Spinner/Spinner';
+import GamesEnum from '@/constants/gamesEnum';
 
 interface IPageProps {
-  params: { playerId: string };
+  params: { playerId: string; game: GamesEnum };
 }
 
 const PlayerPage: React.FC<IPageProps> = async (props) => {
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery({
-    queryKey: ['player', props.params.playerId],
+    queryKey: ['player' + props.params.game, props.params.playerId],
     queryFn: () => getPlayerById(props.params.playerId),
   });
 
   await queryClient.prefetchQuery({
-    queryKey: ['matches', props.params.playerId],
-    queryFn: () => getPlayerMatches(props.params.playerId, 0, 50),
+    queryKey: ['matches' + props.params.game, props.params.playerId],
+    queryFn: () =>
+      getPlayerMatches(props.params.playerId, 0, 50, props.params.game),
   });
 
   await queryClient.prefetchQuery({
-    queryKey: ['bans', props.params.playerId],
+    queryKey: ['bans' + props.params.game, props.params.playerId],
     queryFn: () => getPlayerBans(props.params.playerId, 0, 50),
   });
+
+  if (!Object.values(GamesEnum).includes(props.params.game as GamesEnum)) {
+    return (
+      <div className={'grid min-h-screen w-full place-items-center'}>
+        <h1>Game not found!</h1>
+      </div>
+    );
+  }
 
   return (
     <Suspense
@@ -45,7 +55,10 @@ const PlayerPage: React.FC<IPageProps> = async (props) => {
         </div>
       }>
       <HydrationBoundary state={dehydrate(queryClient)}>
-        <PlayerScreen playerId={props.params.playerId} />
+        <PlayerScreen
+          playerId={props.params.playerId}
+          game={props.params.game}
+        />
       </HydrationBoundary>
     </Suspense>
   );

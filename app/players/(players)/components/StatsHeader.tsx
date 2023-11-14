@@ -5,10 +5,12 @@ import { MatchDataType, MatchItemType } from '@/types/MatchTypes';
 import moment from 'moment/moment';
 import { FiArrowDownRight, FiArrowRight, FiArrowUpRight } from 'react-icons/fi';
 import SkillLevel from '@/app/(common)/components/badge/SkillLevel';
+import GamesEnum from '@/constants/gamesEnum';
 
 interface IStatsHeaderProps {
   player?: PlayerDataType;
   matches?: MatchDataType;
+  game: GamesEnum;
 }
 
 /**
@@ -69,19 +71,23 @@ const getTrendIcon = (value: number): React.ReactNode => {
   }
 };
 
-const StatsHeader: React.FC<IStatsHeaderProps> = ({ player, matches }) => {
+const StatsHeader: React.FC<IStatsHeaderProps> = ({
+  player,
+  matches,
+  game,
+}) => {
   return (
     <div>
-      <h3>CS2 Statistics</h3>
+      <h3>{game.toUpperCase()} Statistics</h3>
       <p className={'mt-1 text-xs text-muted-foreground'}>
-        Basic player statistics in Counter Strike 2.
+        Basic player statistics in {game.toUpperCase()}.
       </p>
 
       <div className={'mt-3 flex flex-wrap items-center gap-3'}>
-        <SkillLevel level={player?.games?.cs2?.skill_level} />
+        <SkillLevel level={player?.games?.[game]?.skill_level} />
 
         <Badge variant={'outline'} className={'px-3 py-2 font-normal'}>
-          {player?.games?.cs2?.faceit_elo} ELO
+          {player?.games?.[game]?.faceit_elo} ELO
         </Badge>
       </div>
 

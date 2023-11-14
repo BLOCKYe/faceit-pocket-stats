@@ -34,9 +34,7 @@ describe('HomeScreen', () => {
       </QueryClientProvider>
     ); // ARRANGE
 
-    const input = screen.getByPlaceholderText(
-      'Player nickname / steam profile link...'
-    ); // ACTION
+    const input = screen.getByPlaceholderText('Search player...'); // ACTION
 
     expect(input).toBeInTheDocument(); // ASSERT
   });
