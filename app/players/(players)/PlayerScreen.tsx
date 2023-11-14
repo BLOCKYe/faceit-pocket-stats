@@ -1,7 +1,7 @@
 'use client';
 
-import React from 'react';
-import { useQuery } from '@tanstack/react-query';
+import React, { useMemo, useState } from 'react';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { PlayerDataType } from '@/types/PlayerType';
 import MainWrapper from '@/app/(common)/components/wrappers/MainWrapper';
 import BackButton from '@/app/(common)/components/buttons/BackButton';
@@ -15,6 +15,9 @@ import BansList from '@/app/players/(players)/components/BansList';
 import MatchesList from '@/app/players/(players)/components/MatchesList';
 import StatsHeader from '@/app/players/(players)/components/StatsHeader';
 import GamesEnum from '@/constants/gamesEnum';
+import { Button } from '@/components/ui/button';
+import { getPlayerMatches } from '@/repository/PlayerRepository';
+import { paginationMatchesPerPage } from '@/constants/pagination';
 
 interface IPlayerScreenProps {
   playerId: string;
@@ -26,14 +29,42 @@ const PlayerScreen: React.FC<IPlayerScreenProps> = (props) => {
     queryKey: ['player' + props.game, props.playerId],
   });
 
+  const [matchesPage, setMatchesPage] = useState(1);
   const matches = useQuery<MatchDataType>({
-    queryKey: ['matches' + props.game, props.playerId],
+    enabled: matchesPage > 1,
+    queryKey: ['matches' + props.game, props.playerId, matchesPage],
+    queryFn: () =>
+      getPlayerMatches(
+        props.playerId,
+        matchesPage * paginationMatchesPerPage - paginationMatchesPerPage,
+        paginationMatchesPerPage,
+        props.game
+      ),
+    placeholderData: keepPreviousData,
   });
 
   const bans = useQuery<BanDataType>({
     queryKey: ['bans' + props.game, props.playerId],
   });
 
+  /**
+   * Status of next page button
+   */
+  const getNextPageButtonIsDisabled = useMemo(() => {
+    if (matches.isPlaceholderData) {
+      return true;
+    }
+
+    if ((matches.data?.items?.length ?? 0) < paginationMatchesPerPage) {
+      return true;
+    }
+
+    return false;
+  }, [matches.data?.items?.length, matches.isPlaceholderData]);
+
+  /**
+   * Render 404
+   */
   if (!player.data) {
     return (
       <MainWrapper>
@@ -58,8 +89,10 @@ const PlayerScreen: React.FC<IPlayerScreenProps> = (props) => {
           link={PATHS.HOME}
           text={'Back to home page'}
           type={'left'}
+          shortText={'Home'}
         />
         <BackButton
+          shortText={'CSGO'}
           link={PATHS.PLAYERS.PLAYER_ID(
             props.playerId,
             props.game === GamesEnum.CS2 ? GamesEnum.CSGO : GamesEnum.CS2
@@ -108,7 +141,32 @@ const PlayerScreen: React.FC<IPlayerScreenProps> = (props) => {
 
         {/* <--- matches ---> */}
         <section>
-          <MatchesList matches={matches.data} />
+          <MatchesList matches={matches.data} page={matchesPage} />
+
+          <div
+            className={
+              'mt-3 flex flex-wrap items-center justify-between gap-3'
+            }>
+            <Button
+              disabled={matchesPage === 1}
+              variant={'outline'}
+              size={'sm'}
+              onClick={() => setMatchesPage((old) => old - 1)}>
+              Previous
+            </Button>
+
+            <h1 className={'text-xs text-muted-foreground'}>
+              Page {matchesPage}
+            </h1>
+
+            <Button
+              disabled={getNextPageButtonIsDisabled}
+              variant={'outline'}
+              size={'sm'}
+              onClick={() => setMatchesPage((old) => old + 1)}>
+              Next
+            </Button>
+          </div>
         </section>
       </section>
     </MainWrapper>

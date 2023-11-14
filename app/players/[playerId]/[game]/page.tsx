@@ -12,6 +12,7 @@ import {
 } from '@/repository/PlayerRepository';
 import Spinner from '@/app/(common)/components/ui/Spinner/Spinner';
 import GamesEnum from '@/constants/gamesEnum';
+import { paginationMatchesPerPage } from '@/constants/pagination';
 
 interface IPageProps {
   params: { playerId: string; game: GamesEnum };
@@ -25,9 +26,14 @@ const PlayerPage: React.FC<IPageProps> = async (props) => {
   });
 
   await queryClient.prefetchQuery({
-    queryKey: ['matches' + props.params.game, props.params.playerId],
+    queryKey: ['matches' + props.params.game, props.params.playerId, 1],
     queryFn: () =>
-      getPlayerMatches(props.params.playerId, 0, 50, props.params.game),
+      getPlayerMatches(
+        props.params.playerId,
+        0,
+        paginationMatchesPerPage,
+        props.params.game
+      ),
   });
 
   await queryClient.prefetchQuery({

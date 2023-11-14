@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { PlayerDataType } from '@/types/PlayerType';
 import { MatchDataType, MatchItemType } from '@/types/MatchTypes';
@@ -23,12 +23,28 @@ interface IStatsHeaderProps {
 const getSummaryByRange = (
   days: number,
   matches?: MatchItemType[]
-): { loses: number; wins: number; text: React.ReactNode } => {
+): {
+  loses: number;
+  wins: number;
+  kills: number;
+  deaths: number;
+  kdRatio: string;
+  summaryComponent: React.ReactNode;
+} => {
   let wins = 0;
   let loses = 0;
+  let kills = 0;
+  let deaths = 0;
 
   if (!matches) {
-    return { loses, wins, text: `${wins} wins / ${loses} loses` };
+    return {
+      loses,
+      wins,
+      kills,
+      deaths: deaths,
+      kdRatio: '0',
+      summaryComponent: `${wins} wins / ${loses} loses`,
+    };
   }
 
   const today = new Date();
@@ -44,16 +60,24 @@ const getSummaryByRange = (
     } else if (parseInt(match.stats.Result) === 1) {
       wins = wins + 1;
     }
+
+    kills = kills + parseInt(match.stats.Kills);
+    deaths = deaths + parseInt(match.stats.Deaths);
   }
 
   return {
     loses,
     wins,
-    text: (
-      <div className={'flex flex-wrap items-center'}>
-        {getTrendIcon(wins - loses)} {wins} wins / {loses} loses
-      </div>
+    kills,
+    deaths: deaths,
+    summaryComponent: getMatchesComponents(
+      wins,
+      loses,
+      kills,
+      deaths,
+      matchesFromRange
     ),
+    kdRatio: (kills / deaths).toFixed(2),
   };
 };
 
@@ -71,11 +95,48 @@ const getTrendIcon = (value: number): React.ReactNode => {
   }
 };
 
+/**
+ *
+ * @param wins
+ * @param loses
+ * @param kills
+ * @param deaths
+ * @param matchesFromRange
+ */
+const getMatchesComponents = (
+  wins: number,
+  loses: number,
+  kills: number,
+  deaths: number,
+  matchesFromRange: MatchItemType[]
+): React.ReactNode => {
+  if (matchesFromRange.length === 0) {
+    return (
+      <div className={'text-xs text-muted-foreground'}>
+        No match was played during the period.
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <div className={'flex flex-wrap items-center'}>
+        {getTrendIcon(wins - loses)} {wins} wins / {loses} loses
+      </div>
+      <div className={'mt-3 text-xs text-muted-foreground'}>
+        {(kills / deaths).toFixed(2)} KD Ratio
+      </div>
+    </div>
+  );
+};
+
 const StatsHeader: React.FC<IStatsHeaderProps> = ({
   player,
   matches,
   game,
 }) => {
+  const storedMatches = useRef(matches?.items);
+
   return (
     <div>
       <h3>{game.toUpperCase()} Statistics</h3>
@@ -93,23 +154,25 @@ const StatsHeader: React.FC<IStatsHeaderProps> = ({
 
       <div className={'mt-5 grid gap-3 md:grid-cols-3 '}>
         <div className={'rounded border p-3 text-sm'}>
-          <h3 className={'text-xs'}>Today results</h3>
+          <h3 className={'text-xs'}>24h results</h3>
           <div className={'mt-3'}>
-            {getSummaryByRange(1, matches?.items).text}
+            {getSummaryByRange(1, storedMatches.current).summaryComponent}
           </div>
         </div>
 
         <div className={'rounded border p-3 text-sm'}>
           <h3 className={'text-xs'}>7 days results</h3>
           <div className={'mt-3'}>
-            {getSummaryByRange(7, matches?.items).text}
+            {getSummaryByRange(7, storedMatches.current).summaryComponent}
           </div>
         </div>
 
         <div className={'rounded border p-3 text-sm'}>
-          <h3 className={'text-xs'}>{matches?.items.length} matches results</h3>
+          <h3 className={'text-xs'}>
+            {storedMatches.current?.length} matches results
+          </h3>
           <div className={'mt-3'}>
-            {getSummaryByRange(99999, matches?.items).text}
+            {getSummaryByRange(99999, storedMatches.current).summaryComponent}
           </div>
         </div>
       </div>
