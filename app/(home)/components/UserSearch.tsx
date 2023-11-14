@@ -1,7 +1,6 @@
 'use client';
 
-import { Input } from '@/components/ui/input';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -13,6 +12,14 @@ import PATHS from '@/constants/Paths';
 import { useRouter } from 'next/navigation';
 import { useDebouncedCallback } from '@/hooks/useDebouncesCallback';
 import { useToast } from '@/components/ui/use-toast';
+import Autocomplete, {
+  AutoCompleteDataType,
+} from '@/app/(common)/components/inputs/Autocomplete';
+import SkillLevel from '@/app/(common)/components/badge/SkillLevel';
+import GamesEnum from '@/constants/gamesEnum';
+import { SearchPlayerType } from '@/types/PlayerType';
+import Image from 'next/image';
+import { Input } from '@/components/ui/input';
 
 const SearchSchema = z.object({
   searchValue: z.string().min(2, {
@@ -39,9 +46,21 @@ const searchQueryFactory = (value: string): string => {
   return `nickname=${value}`;
 };
 
+/**
+ * This function is used to get user level
+ * @param player
+ * @param gameName
+ */
+const getSkillLevel = (player: SearchPlayerType, gameName: string): number => {
+  const game = player.games.find((game) => game.name === gameName);
+  return parseInt(game?.skill_level ?? '0');
+};
+
 const UserSearch: React.FC = (props) => {
   const router = useRouter();
   const { toast } = useToast();
+
+  const [playersLists, setPlayersList] = useState<AutoCompleteDataType[]>([]);
 
   const getInfoMutation = useMutation({
     mutationFn: (nickname: string) => getPlayer(nickname),
@@ -54,8 +73,36 @@ const UserSearch: React.FC = (props) => {
 
   const searchPlayerMutation = useMutation({
     mutationFn: (nickname: string) => searchPlayers(nickname),
-    onSuccess: (data) => console.log(data),
-    onError: () => toast({ title: 'Player not found' }),
+    onSuccess: (data) =>
+      setPlayersList(
+        data.map((item) => ({
+          id: item.player_id,
+          name: (
+            <div
+              className={'flex items-center justify-between gap-3 font-bold'}>
+              <div className={'flex items-center gap-3'}>
+                <Image
+                  src={item?.avatar || '/default_avatar.png'}
+                  alt={item?.nickname}
+                  width={30}
+                  height={30}
+                  className={'aspect-square rounded object-cover'}
+                  priority
+                />
+                {item.nickname}
+              </div>
+              <SkillLevel
+                className={'h-8 w-8'}
+                level={getSkillLevel(item, GamesEnum.CS2)}
+              />
+            </div>
+          ),
+        }))
+      ),
+    onError: () => {
+      toast({ title: 'Player not found' });
+      setPlayersList([]);
+    },
   });
 
   const form = useForm<z.infer<typeof SearchSchema>>({
@@ -79,8 +126,13 @@ const UserSearch: React.FC = (props) => {
    * This function is used search player on debounce
    */
   const handleDebounceSearch = useDebouncedCallback((value) => {
+    if (typeof value === 'string' && value.length < 2) {
+      setPlayersList([]);
+      return;
+    }
+
     searchPlayerMutation.mutate(value);
-  }, 700);
+  }, 500);
 
   return (
     <div className={'mt-10'}>
@@ -90,14 +142,21 @@ const UserSearch: React.FC = (props) => {
 
       {/* <--- Form ---> */}
       <form
-        className={'mt-2 flex items-center'}
+        className={'mt-2 flex items-start'}
         onSubmit={form.handleSubmit(handleSubmit)}>
-        <Input
-          type='search'
-          placeholder='Player nickname / steam profile link...'
+        <Autocomplete
           className={'rounded-r-none'}
+          placeholder={'Search player...'}
+          onSelect={(playerId: any) =>
+            router.push(PATHS.PLAYERS.PLAYER_ID(playerId))
+          }
+          data={playersLists}
+          type='search'
           {...form.register('searchValue')}
-          onChange={(e) => handleDebounceSearch(e.target.value)}
+          onChange={async (e) => {
+            handleDebounceSearch(e.target.value);
+            await form.register('searchValue').onChange(e);
+          }}
         />
         <Button
           variant={'secondary'}

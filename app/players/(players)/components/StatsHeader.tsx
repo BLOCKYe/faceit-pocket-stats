@@ -4,6 +4,7 @@ import { PlayerDataType } from '@/types/PlayerType';
 import { MatchDataType, MatchItemType } from '@/types/MatchTypes';
 import moment from 'moment/moment';
 import { FiArrowDownRight, FiArrowRight, FiArrowUpRight } from 'react-icons/fi';
+import SkillLevel from '@/app/(common)/components/badge/SkillLevel';
 
 interface IStatsHeaderProps {
   player?: PlayerDataType;
@@ -68,24 +69,6 @@ const getTrendIcon = (value: number): React.ReactNode => {
   }
 };
 
-/**
- *
- * @param level
- */
-const getLevelStyles = (level: number): string => {
-  if (level >= 10) {
-    return 'border-red-500 bg-red-900';
-  } else if (level < 10 && level > 7) {
-    return 'border-orange-500 bg-orange-900';
-  } else if (level < 8 && level > 3) {
-    return 'border-yellow-500 bg-yellow-900';
-  } else if (level < 4 && level > 1) {
-    return 'border-green-500 bg-green-900';
-  }
-
-  return 'border-zinc-500 bg-zinc-900';
-};
-
 const StatsHeader: React.FC<IStatsHeaderProps> = ({ player, matches }) => {
   return (
     <div>
@@ -95,13 +78,7 @@ const StatsHeader: React.FC<IStatsHeaderProps> = ({ player, matches }) => {
       </p>
 
       <div className={'mt-3 flex flex-wrap items-center gap-3'}>
-        <div
-          className={
-            'flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border-2 bg-opacity-30 p-2 font-bold ' +
-            getLevelStyles(player?.games?.cs2?.skill_level ?? 0)
-          }>
-          {player?.games?.cs2?.skill_level}
-        </div>
+        <SkillLevel level={player?.games?.cs2?.skill_level} />
 
         <Badge variant={'outline'} className={'px-3 py-2 font-normal'}>
           {player?.games?.cs2?.faceit_elo} ELO
