@@ -152,6 +152,7 @@ const UserSearch: React.FC = (props) => {
           data={playersLists}
           inputComponent={
             <Input
+              className={'rounded-r-none'}
               autoComplete={'off'}
               placeholder={'Search player...'}
               type='search'

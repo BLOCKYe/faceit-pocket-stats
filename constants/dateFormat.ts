@@ -1,5 +1,5 @@
-export const defaultDateTimeFormat = 'YYYY-MM-DD, HH:mm';
+export const defaultDateTimeFormat = 'DD/MM/YYYY, HH:mm';
 
-export const defaultDateFormat = 'YYYY-MM-DD';
+export const defaultDateFormat = 'DD/MM/YYYY';
 
-export const monthYearDateFormat = 'MMMM YYYY';
+export const monthYearDateFormat = 'DD.MM.YYYY';
