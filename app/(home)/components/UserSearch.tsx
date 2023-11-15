@@ -80,7 +80,7 @@ const UserSearch: React.FC = (props) => {
           name: (
             <div
               className={'flex items-center justify-between gap-3 font-bold'}>
-              <div className={'flex items-center gap-3'}>
+              <div className={'flex items-center gap-3 text-xs'}>
                 <Image
                   src={item?.avatar || '/default_avatar.png'}
                   alt={item?.nickname}
@@ -171,8 +171,7 @@ const UserSearch: React.FC = (props) => {
           className={'rounded-l-none'}
           disabled={getInfoMutation.isPending}
           data-testid={'submit-button'}>
-          <BiSearch className={'mr-1'} />
-          {getInfoMutation.isPending ? 'Searching...' : 'Search'}
+          <BiSearch className={'text-xl'} />
         </Button>
       </form>
 

@@ -1,6 +1,12 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { Input } from '@/components/ui/input';
 import { useOnClickOutside } from '@/hooks/useOnClickOutside';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 export type AutoCompleteDataType = {
   name: React.ReactNode;
@@ -27,42 +33,37 @@ const Autocomplete: React.FC<IAutocompleteProps> = (props) => {
   useOnClickOutside(ref, handleClickOutside);
 
   useEffect(() => {
-    setIsOpen(!!props.data.length);
-  }, [props.data.length]);
-
-  /**
-   * Render memoized items
-   */
-  const renderItems = useMemo(() => {
-    if (props.data.length === 0) return <></>;
-
-    return (
-      <div
-        className={
-          'sticky mt-1 max-h-[250px] w-full overflow-y-auto rounded-md border border-zinc-800'
-        }
-        style={{ maxWidth: 'inherit' }}>
-        {props.data.map((item: AutoCompleteDataType) => (
-          <div
-            className={
-              'cursor-pointer px-3 py-2 text-xs transition-all hover:bg-zinc-900'
-            }
-            key={item.id}
-            onClick={() => props.onSelect && props.onSelect(item.id)}>
-            {item.name}
-          </div>
-        ))}
-      </div>
-    );
-  }, [props]);
+    setIsOpen(props.data.length > 0);
+  }, [props.data]);
 
   return (
-    <div
-      className={'relative w-full ' + props.className}
-      ref={ref}
-      onClick={() => setIsOpen(true)}>
+    <div className={'w-full'}>
       {props.inputComponent}
-      {isOpen && renderItems}
+
+      <Select open={isOpen}>
+        <SelectTrigger
+          hideChevron
+          className={'focus:none active:none h-0 border-none p-0 opacity-0'}
+        />
+
+        <SelectContent
+          ref={ref}
+          className={'w-full'}
+          position={'popper'}
+          unselectable={'on'}>
+          <div className={'w-full'}>
+            {props.data.map((item: AutoCompleteDataType) => (
+              <SelectItem
+                key={item.id}
+                value={item.id}
+                onClick={() => props.onSelect && props.onSelect(item.id)}
+                className={'grid w-full cursor-pointer px-1'}>
+                {item.name}
+              </SelectItem>
+            ))}
+          </div>
+        </SelectContent>
+      </Select>
     </div>
   );
 };
