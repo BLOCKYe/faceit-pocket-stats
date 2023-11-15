@@ -10,6 +10,7 @@ export type AutoCompleteDataType = {
 interface IAutocompleteProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
   data: AutoCompleteDataType[];
+  inputComponent: React.ReactNode;
 }
 
 const Autocomplete: React.FC<IAutocompleteProps> = (props) => {
@@ -56,13 +57,11 @@ const Autocomplete: React.FC<IAutocompleteProps> = (props) => {
   }, [props]);
 
   return (
-    <div className={'relative w-full ' + props.className} ref={ref}>
-      <Input
-        autoComplete={'off'}
-        {...props}
-        onSelect={undefined}
-        onClick={() => setIsOpen(true)}
-      />
+    <div
+      className={'relative w-full ' + props.className}
+      ref={ref}
+      onClick={() => setIsOpen(true)}>
+      {props.inputComponent}
       {isOpen && renderItems}
     </div>
   );

@@ -146,18 +146,24 @@ const UserSearch: React.FC = (props) => {
         onSubmit={form.handleSubmit(handleSubmit)}>
         <Autocomplete
           className={'rounded-r-none'}
-          placeholder={'Search player...'}
           onSelect={(playerId: any) =>
             router.push(PATHS.PLAYERS.PLAYER_ID(playerId))
           }
           data={playersLists}
-          type='search'
-          {...form.register('searchValue')}
-          onChange={async (e) => {
-            handleDebounceSearch(e.target.value);
-            await form.register('searchValue').onChange(e);
-          }}
+          inputComponent={
+            <Input
+              autoComplete={'off'}
+              placeholder={'Search player...'}
+              type='search'
+              {...form.register('searchValue')}
+              onChange={(e) => {
+                handleDebounceSearch(e.target.value);
+                form.register('searchValue').onChange(e);
+              }}
+            />
+          }
         />
+
         <Button
           variant={'secondary'}
           type={'submit'}
