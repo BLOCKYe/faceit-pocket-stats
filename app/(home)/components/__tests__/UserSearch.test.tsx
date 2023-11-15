@@ -83,24 +83,26 @@ describe('UserSearch', () => {
       const button = screen.getByTestId('submit-button'); // ACTION
       await userEvent.click(button);
 
-      expect(errorElement).toHaveTextContent('Required'); // ASSERT
+      expect(errorElement).toHaveTextContent(
+        'Nickname must be at least 2 characters.'
+      ); // ASSERT
     });
 
-    // it('should disable button after create request', async () => {
-    //   render(
-    //     <QueryClientProvider client={queryClient}>
-    //       <UserSearch />
-    //     </QueryClientProvider>
-    //   ); // ARRANGE
-    //
-    //   // ACTION
-    //   const input = screen.getByPlaceholderText('Search player...');
-    //   await userEvent.type(input, 'DODO__X');
-    //   const button = screen.getByTestId('submit-button');
-    //   await userEvent.click(button);
-    //   await waitFor(() => {
-    //     expect(button).toBeDisabled();
-    //   });
-    // });
+    it('should disable button after create request', async () => {
+      render(
+        <QueryClientProvider client={queryClient}>
+          <UserSearch />
+        </QueryClientProvider>
+      ); // ARRANGE
+
+      // ACTION
+      const input = screen.getByPlaceholderText('Search player...');
+      await userEvent.type(input, 'DODO__X');
+      const button = screen.getByTestId('submit-button');
+      await userEvent.click(button);
+      await waitFor(() => {
+        expect(button).toBeDisabled();
+      });
+    });
   });
 });
