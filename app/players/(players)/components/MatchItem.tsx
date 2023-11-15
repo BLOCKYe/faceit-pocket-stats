@@ -47,7 +47,9 @@ const getResultBadge = (result: string, score: string) => {
 const getKDBadge = (kills: string, deaths: string, kd: string) => {
   if (parseFloat(kd) >= 1) {
     return (
-      <Badge variant={'outline'} className={'py-2 font-normal md:text-center'}>
+      <Badge
+        variant={'outline'}
+        className={'py-1 font-normal md:py-2 md:text-center'}>
         <FiArrowUpRight className={'mr-2 text-green-500'} /> {kills} / {deaths}{' '}
         ({kd})
       </Badge>
@@ -57,7 +59,7 @@ const getKDBadge = (kills: string, deaths: string, kd: string) => {
       return (
         <Badge
           variant={'outline'}
-          className={'py-2 font-normal md:text-center'}>
+          className={'py-1 font-normal md:py-2 md:text-center'}>
           <FiArrowDownRight className={'mr-2 text-red-500'} /> {kills} /{' '}
           {deaths} ({kd})
         </Badge>
@@ -73,7 +75,7 @@ const MatchItem: React.FC<IMatchItemProps> = ({ match }) => {
       className={
         'grid cursor-pointer grid-cols-2 items-center gap-3 rounded border bg-zinc-900 p-3 text-xs transition-all hover:border-zinc-600 md:grid-cols-4 md:py-2'
       }>
-      <p className={'text-sm'}>
+      <p className={'md:text-md text-xs'}>
         {moment(match.stats['Updated At']).format(defaultDateTimeFormat)}
       </p>
       <p className={'text-end text-muted-foreground md:text-center'}>

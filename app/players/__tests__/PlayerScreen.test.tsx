@@ -1,7 +1,8 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import PlayerScreen from '../(players)/PlayerScreen';
+import GamesEnum from '@/constants/gamesEnum';
 
 // Mock useRouter:
 jest.mock('next/navigation', () => ({
@@ -21,7 +22,7 @@ describe('PlayerScreen', () => {
   it('should render information about not existing player', async () => {
     render(
       <QueryClientProvider client={queryClient}>
-        <PlayerScreen {...props} />
+        <PlayerScreen {...props} game={GamesEnum.CS2} />
       </QueryClientProvider>
     ); // ARRANGE
 

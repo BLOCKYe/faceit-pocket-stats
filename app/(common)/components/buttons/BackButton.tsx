@@ -1,11 +1,13 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { FaArrowLeftLong } from 'react-icons/fa6';
+import { FaArrowLeftLong, FaArrowRightLong } from 'react-icons/fa6';
 import { useRouter } from 'next/navigation';
 
 interface IBackButtonProps {
   text?: string;
+  shortText?: string;
   link: string;
+  type?: 'left' | 'right';
 }
 
 const BackButton: React.FC<IBackButtonProps> = (props) => {
@@ -13,8 +15,18 @@ const BackButton: React.FC<IBackButtonProps> = (props) => {
 
   return (
     <Button variant={'link'} onClick={() => router.push(props.link)}>
-      <FaArrowLeftLong className={'mr-3'} />
-      {props.text ?? 'Back'}
+      {props.type !== 'right' && <FaArrowLeftLong className={'mr-3'} />}
+
+      {!props.shortText && <p>{props.text ?? 'Back'}</p>}
+
+      {props.shortText && (
+        <>
+          <p className={'hidden md:block'}>{props.text ?? 'Back'}</p>
+          <p className={'md:hidden'}>{props.shortText ?? 'Back'}</p>
+        </>
+      )}
+
+      {props.type === 'right' && <FaArrowRightLong className={'ml-3'} />}
     </Button>
   );
 };

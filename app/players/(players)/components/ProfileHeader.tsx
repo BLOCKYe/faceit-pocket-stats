@@ -15,7 +15,6 @@ interface IProfileHeaderProps {
 }
 
 const ProfileHeader: React.FC<IProfileHeaderProps> = ({ player }) => {
-  console.log(player);
   return (
     <>
       <div className={'flex flex-wrap items-center gap-5'}>
@@ -28,11 +27,11 @@ const ProfileHeader: React.FC<IProfileHeaderProps> = ({ player }) => {
           priority
         />
         <div>
-          <div className={'flex items-start gap-2'}>
-            <h3 className={'text-3xl font-bold'}>{player?.nickname}</h3>
+          <div className={'flex items-center gap-2'}>
             {player.memberships.includes('premium') && (
-              <MdStars className={'text-md mt-1 text-yellow-500'} />
+              <MdStars className={'text-md text-yellow-500'} />
             )}
+            <h3 className={'text-3xl font-bold'}>{player?.nickname}</h3>
           </div>
 
           <p className={'mt-2 text-xs text-muted-foreground'}>
