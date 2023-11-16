@@ -132,7 +132,7 @@ const UserSearch: React.FC = (props) => {
     }
 
     searchPlayerMutation.mutate(value);
-  }, 500);
+  }, 1000);
 
   return (
     <div className={'mt-10'}>

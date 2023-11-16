@@ -38,26 +38,28 @@ const Autocomplete: React.FC<IAutocompleteProps> = (props) => {
 
   return (
     <div className={'w-full'}>
-      {props.inputComponent}
+      <div>{props.inputComponent}</div>
 
       <Select open={isOpen}>
         <SelectTrigger
+          autoFocus={false}
           hideChevron
           className={'focus:none active:none h-0 border-none p-0 opacity-0'}
         />
 
         <SelectContent
           ref={ref}
-          className={'w-full'}
-          position={'popper'}
-          unselectable={'on'}>
+          className={'mt-10 w-full'}
+          autoFocus={false}
+          position={'item-aligned'}>
           <div className={'w-full'}>
             {props.data.map((item: AutoCompleteDataType) => (
               <SelectItem
                 key={item.id}
                 value={item.id}
                 onClick={() => props.onSelect && props.onSelect(item.id)}
-                className={'grid w-full cursor-pointer px-1'}>
+                className={'grid w-full cursor-pointer px-1'}
+                autoFocus={false}>
                 {item.name}
               </SelectItem>
             ))}
