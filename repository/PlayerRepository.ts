@@ -86,7 +86,7 @@ export const getPlayerBans = async (
 export const searchPlayers = async (
   nickname: string,
   start = 0,
-  limit = 10
+  limit = 5
 ): Promise<SearchPlayerType[]> => {
   const response = await httpClient.get<SearchPlayerResponseType>(
     `/search/players?nickname=${nickname}&offset=${start}&limit=${limit}`

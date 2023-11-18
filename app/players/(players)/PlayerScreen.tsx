@@ -84,7 +84,15 @@ const PlayerScreen: React.FC<IPlayerScreenProps> = (props) => {
 
   return (
     <MainWrapper>
-      <div className={'flex flex-wrap items-center justify-between gap-3'}>
+      <div
+        className={
+          'fixed left-[50%] top-0 z-10 w-full max-w-3xl -translate-x-1/2 transform bg-zinc-950 bg-opacity-95 px-3'
+        }>
+        <UserSearch withoutLabel />
+      </div>
+
+      <div
+        className={'mt-20 flex flex-wrap items-center justify-between gap-3'}>
         <BackButton
           link={PATHS.HOME}
           text={'Back to home page'}
@@ -105,8 +113,6 @@ const PlayerScreen: React.FC<IPlayerScreenProps> = (props) => {
           type={'right'}
         />
       </div>
-
-      <UserSearch />
 
       {/* <--- Profile header ---> */}
       <section

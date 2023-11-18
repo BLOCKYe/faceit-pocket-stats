@@ -1,13 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useOnClickOutside } from '@/hooks/useOnClickOutside';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import { Input } from '@/components/ui/input';
 
 export type AutoCompleteDataType = {
   name: React.ReactNode;
@@ -18,6 +10,7 @@ interface IAutocompleteProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
   data: AutoCompleteDataType[];
   inputComponent: React.ReactNode;
+  onSelect: (id: any) => void;
 }
 
 const Autocomplete: React.FC<IAutocompleteProps> = (props) => {
@@ -37,34 +30,39 @@ const Autocomplete: React.FC<IAutocompleteProps> = (props) => {
     setIsOpen(props.data.length > 0);
   }, [props.data]);
 
+  /**
+   *
+   */
+  const renderItems = useMemo(() => {
+    return props.data.map((item) => (
+      <AutocompleteItem key={item.id} data={item} onSelect={props.onSelect} />
+    ));
+  }, [props.data]);
+
   return (
-    <div className={'w-full'}>
-      <div>{props.inputComponent}</div>
+    <div className={'w-full'} ref={ref}>
+      <div onClick={() => props.data.length > 0 && setIsOpen(true)}>
+        {props.inputComponent}
+      </div>
 
-      <Select open={isOpen}>
-        <SelectTrigger
-          autoFocus={false}
-          hideChevron
-          className={'focus:none active:none h-0 border-none p-0 opacity-0'}
-        />
-
-        <SelectContent ref={ref} className={'mt-10 w-full'} autoFocus={false}>
-          <div className={'w-full'}>
-            {props.data.map((item: AutoCompleteDataType) => (
-              <SelectItem
-                key={item.id}
-                value={item.id}
-                onClick={() => props.onSelect && props.onSelect(item.id)}
-                className={'grid w-full cursor-pointer px-1'}
-                autoFocus={false}>
-                {item.name}
-              </SelectItem>
-            ))}
-          </div>
-        </SelectContent>
-      </Select>
+      {isOpen && <div className={'rounded-md border p-1'}>{renderItems}</div>}
     </div>
   );
 };
 
 export default Autocomplete;
+
+interface IAutocompleteItemProps {
+  data: AutoCompleteDataType;
+  onSelect: (data: AutoCompleteDataType) => void;
+}
+
+const AutocompleteItem: React.FC<IAutocompleteItemProps> = (props) => {
+  return (
+    <div
+      onClick={() => props.onSelect(props.data)}
+      className={'cursor-pointer px-2 py-2 transition-all hover:bg-zinc-900'}>
+      {props.data.name}
+    </div>
+  );
+};

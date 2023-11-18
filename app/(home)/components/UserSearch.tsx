@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -20,6 +20,7 @@ import GamesEnum from '@/constants/gamesEnum';
 import { SearchPlayerType } from '@/types/PlayerType';
 import Image from 'next/image';
 import { Input } from '@/components/ui/input';
+import { AutoComplete } from '@react-md/autocomplete';
 
 const SearchSchema = z.object({
   searchValue: z.string().min(2, {
@@ -56,11 +57,15 @@ const getSkillLevel = (player: SearchPlayerType, gameName: string): number => {
   return parseInt(game?.skill_level ?? '0');
 };
 
-const UserSearch: React.FC = (props) => {
+interface IUserSearchProps {
+  withoutLabel?: boolean;
+}
+
+const UserSearch: React.FC<IUserSearchProps> = (props) => {
   const router = useRouter();
   const { toast } = useToast();
 
-  const [playersLists, setPlayersList] = useState<AutoCompleteDataType[]>([]);
+  const [playersLists, setPlayersList] = useState<any[]>([]);
 
   const getInfoMutation = useMutation({
     mutationFn: (nickname: string) => getPlayer(nickname),
@@ -136,9 +141,11 @@ const UserSearch: React.FC = (props) => {
 
   return (
     <div className={'mt-10'}>
-      <h3 className={'text-sm text-muted-foreground'}>
-        Find players statistics by nickname or steam profile
-      </h3>
+      {!props.withoutLabel && (
+        <h3 className={'text-sm text-muted-foreground'}>
+          Find players statistics by nickname or steam profile
+        </h3>
+      )}
 
       {/* <--- Form ---> */}
       <form
@@ -146,8 +153,8 @@ const UserSearch: React.FC = (props) => {
         onSubmit={form.handleSubmit(handleSubmit)}>
         <Autocomplete
           className={'rounded-r-none'}
-          onSelect={(playerId: any) =>
-            router.push(PATHS.PLAYERS.PLAYER_ID(playerId))
+          onSelect={(data: AutoCompleteDataType) =>
+            router.push(PATHS.PLAYERS.PLAYER_ID(data.id))
           }
           data={playersLists}
           inputComponent={
