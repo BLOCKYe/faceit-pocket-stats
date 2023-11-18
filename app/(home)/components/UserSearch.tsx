@@ -20,7 +20,6 @@ import GamesEnum from '@/constants/gamesEnum';
 import { SearchPlayerType } from '@/types/PlayerType';
 import Image from 'next/image';
 import { Input } from '@/components/ui/input';
-import { AutoComplete } from '@react-md/autocomplete';
 
 const SearchSchema = z.object({
   searchValue: z.string().min(2, {
