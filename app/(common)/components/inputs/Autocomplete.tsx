@@ -7,6 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Input } from '@/components/ui/input';
 
 export type AutoCompleteDataType = {
   name: React.ReactNode;
@@ -47,11 +48,7 @@ const Autocomplete: React.FC<IAutocompleteProps> = (props) => {
           className={'focus:none active:none h-0 border-none p-0 opacity-0'}
         />
 
-        <SelectContent
-          ref={ref}
-          className={'mt-10 w-full'}
-          autoFocus={false}
-          position={'item-aligned'}>
+        <SelectContent ref={ref} className={'mt-10 w-full'} autoFocus={false}>
           <div className={'w-full'}>
             {props.data.map((item: AutoCompleteDataType) => (
               <SelectItem
