@@ -1,5 +1,4 @@
-import { AxiosError } from 'axios';
-import httpClient from '@/lib/apiClient';
+import { AxiosError, AxiosInstance } from 'axios';
 import {
   PlayerDataType,
   SearchPlayerResponseType,
@@ -8,6 +7,15 @@ import {
 import { MatchDataType } from '@/types/MatchTypes';
 import { BanDataType } from '@/types/BanTypes';
 import GamesEnum from '@/constants/gamesEnum';
+import HttpClientBuilder from '@/utils/HttpClientBuilder';
+
+const httpClient: AxiosInstance = new HttpClientBuilder()
+  .baseURL(process.env.NEXT_PUBLIC_API_FACEIT_URL)
+  .headers({
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_FACEIT_KEY}`,
+  })
+  .build();
 
 /**
  * This function is used to

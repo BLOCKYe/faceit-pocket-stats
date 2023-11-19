@@ -15,9 +15,11 @@ import BansList from '@/app/players/(players)/components/BansList';
 import MatchesList from '@/app/players/(players)/components/MatchesList';
 import StatsHeader from '@/app/players/(players)/components/StatsHeader';
 import GamesEnum from '@/constants/gamesEnum';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/app/(common)/components/shadcn/ui/button';
 import { getPlayerMatches } from '@/repository/PlayerRepository';
 import { paginationMatchesPerPage } from '@/constants/pagination';
+import { GameType } from '@/types/GamesTypes';
+import { getPlayerGames } from '@/repository/SteamRepository';
 
 interface IPlayerScreenProps {
   playerId: string;
@@ -27,6 +29,11 @@ interface IPlayerScreenProps {
 const PlayerScreen: React.FC<IPlayerScreenProps> = (props) => {
   const player = useQuery<PlayerDataType>({
     queryKey: ['player' + props.game, props.playerId],
+  });
+
+  const games = useQuery<GameType[]>({
+    queryKey: ['games', props.playerId],
+    queryFn: () => getPlayerGames(player.data?.steam_id_64),
   });
 
   const [matchesPage, setMatchesPage] = useState(1);
@@ -100,7 +107,11 @@ const PlayerScreen: React.FC<IPlayerScreenProps> = (props) => {
           shortText={'Home'}
         />
         <BackButton
-          shortText={'CSGO'}
+          shortText={
+            props.game === GamesEnum.CS2
+              ? GamesEnum.CSGO.toUpperCase()
+              : GamesEnum.CS2.toUpperCase()
+          }
           link={PATHS.PLAYERS.PLAYER_ID(
             props.playerId,
             props.game === GamesEnum.CS2 ? GamesEnum.CSGO : GamesEnum.CS2
@@ -134,6 +145,7 @@ const PlayerScreen: React.FC<IPlayerScreenProps> = (props) => {
           player={player.data}
           matches={matches.data}
           game={props.game}
+          games={games.data}
         />
 
         <Divider className={'my-5'} />
@@ -149,30 +161,32 @@ const PlayerScreen: React.FC<IPlayerScreenProps> = (props) => {
         <section>
           <MatchesList matches={matches.data} page={matchesPage} />
 
-          <div
-            className={
-              'mt-3 flex flex-wrap items-center justify-between gap-3'
-            }>
-            <Button
-              disabled={matchesPage === 1}
-              variant={'outline'}
-              size={'sm'}
-              onClick={() => setMatchesPage((old) => old - 1)}>
-              Previous
-            </Button>
+          {matches.data?.items?.length !== 0 && (
+            <div
+              className={
+                'mt-3 flex flex-wrap items-center justify-between gap-3'
+              }>
+              <Button
+                disabled={matchesPage === 1}
+                variant={'outline'}
+                size={'sm'}
+                onClick={() => setMatchesPage((old) => old - 1)}>
+                Previous
+              </Button>
 
-            <h1 className={'text-xs text-muted-foreground'}>
-              Page {matchesPage}
-            </h1>
+              <h1 className={'text-xs text-muted-foreground'}>
+                Page {matchesPage}
+              </h1>
 
-            <Button
-              disabled={getNextPageButtonIsDisabled}
-              variant={'outline'}
-              size={'sm'}
-              onClick={() => setMatchesPage((old) => old + 1)}>
-              Next
-            </Button>
-          </div>
+              <Button
+                disabled={getNextPageButtonIsDisabled}
+                variant={'outline'}
+                size={'sm'}
+                onClick={() => setMatchesPage((old) => old + 1)}>
+                Next
+              </Button>
+            </div>
+          )}
         </section>
       </section>
     </MainWrapper>

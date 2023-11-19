@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './assets/globals.css';
-import { ThemeProvider } from '@/components/theme-provider';
-import ReactQueryProviders from '@/components/ReactQueryProviders';
-import { Toaster } from '@/components/ui/toaster';
+import { ThemeProvider } from '@/app/(common)/components/wrappers/theme-provider';
+import ReactQueryProviders from '@/app/(common)/components/wrappers/ReactQueryProviders';
+import { Toaster } from '@/app/(common)/components/shadcn/ui/toaster';
 import MainWrapper from '@/app/(common)/components/wrappers/MainWrapper';
 import React, { Suspense } from 'react';
 

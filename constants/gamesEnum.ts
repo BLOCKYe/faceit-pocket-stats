@@ -4,3 +4,7 @@ enum GamesEnum {
 }
 
 export default GamesEnum;
+
+export enum SteamGamesAppIds {
+  CS = 730,
+}
