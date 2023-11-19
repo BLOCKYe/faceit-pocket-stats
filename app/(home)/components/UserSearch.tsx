@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -20,6 +20,8 @@ import GamesEnum from '@/constants/gamesEnum';
 import { SearchPlayerType } from '@/types/PlayerType';
 import Image from 'next/image';
 import { Input } from '@/components/ui/input';
+import SearchQueryFactory from '@/lib/SearchQueryFactory';
+import { STEAM_URL } from '@/constants/urls';
 
 const SearchSchema = z.object({
   searchValue: z.string().min(2, {
@@ -32,17 +34,17 @@ const SearchSchema = z.object({
  * build query from search input
  * @param value
  */
-const searchQueryFactory = (value: string): string => {
-  if (value.includes('https://steamcommunity.com/')) {
-    const PROFILE_LINKS_KEYS = ['profiles', 'id'];
-    const valueAsArr = value.split('/');
-    const profileIdIndex =
-      valueAsArr.findIndex((item: string) =>
-        PROFILE_LINKS_KEYS.includes(item)
-      ) + 1;
-    return `game_player_id=${valueAsArr[profileIdIndex]}`;
+const searchQueryFactory = async (value: string): Promise<string> => {
+  // case for profile url type
+  if (value.includes(STEAM_URL)) {
+    const searchQueryFactory = new SearchQueryFactory(value);
+    await searchQueryFactory.setSteamid();
+    const steamid = searchQueryFactory.getSteamid();
+
+    return `game_player_id=${steamid}`;
   }
 
+  // case for nickname type
   return `nickname=${value}`;
 };
 
@@ -81,26 +83,7 @@ const UserSearch: React.FC<IUserSearchProps> = (props) => {
       setPlayersList(
         data.map((item) => ({
           id: item.player_id,
-          name: (
-            <div
-              className={'flex items-center justify-between gap-3 font-bold'}>
-              <div className={'flex items-center gap-3 text-xs'}>
-                <Image
-                  src={item?.avatar || '/default_avatar.png'}
-                  alt={item?.nickname}
-                  width={30}
-                  height={30}
-                  className={'aspect-square rounded object-cover'}
-                  priority
-                />
-                {item.nickname}
-              </div>
-              <SkillLevel
-                className={'h-8 w-8'}
-                level={getSkillLevel(item, GamesEnum.CS2)}
-              />
-            </div>
-          ),
+          name: <SelectPlayerItem {...item} />,
         }))
       ),
     onError: () => {
@@ -121,8 +104,8 @@ const UserSearch: React.FC<IUserSearchProps> = (props) => {
    * handle submit
    * @param data
    */
-  const handleSubmit = (data: z.infer<typeof SearchSchema>) => {
-    const value = searchQueryFactory(data.searchValue);
+  const handleSubmit = async (data: z.infer<typeof SearchSchema>) => {
+    const value = await searchQueryFactory(data.searchValue);
     getInfoMutation.mutate(value);
   };
 
@@ -130,13 +113,16 @@ const UserSearch: React.FC<IUserSearchProps> = (props) => {
    * This function is used search player on debounce
    */
   const handleDebounceSearch = useDebouncedCallback((value) => {
-    if (typeof value === 'string' && value.length < 2) {
+    if (
+      (typeof value === 'string' && value.length < 2) ||
+      value.includes(STEAM_URL)
+    ) {
       setPlayersList([]);
       return;
     }
 
     searchPlayerMutation.mutate(value);
-  }, 1000);
+  }, 700);
 
   return (
     <div className={'mt-10'}>
@@ -190,3 +176,25 @@ const UserSearch: React.FC<IUserSearchProps> = (props) => {
 };
 
 export default UserSearch;
+
+const SelectPlayerItem = (item: SearchPlayerType): React.ReactNode => {
+  return (
+    <div className={'flex items-center justify-between gap-3 font-bold'}>
+      <div className={'flex items-center gap-3 text-xs'}>
+        <Image
+          src={item?.avatar || '/default_avatar.png'}
+          alt={item?.nickname}
+          width={30}
+          height={30}
+          className={'aspect-square rounded object-cover'}
+          priority
+        />
+        {item.nickname}
+      </div>
+      <SkillLevel
+        className={'h-8 w-8'}
+        level={getSkillLevel(item, GamesEnum.CS2)}
+      />
+    </div>
+  );
+};

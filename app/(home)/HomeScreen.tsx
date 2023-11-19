@@ -12,11 +12,13 @@ const HomeScreen: React.FC = (props) => {
           }>
           Faceit Pocket Stats
         </h3>
-        <p className={'mx-auto mt-5 text-sm md:max-w-xl md:text-center'}>
-          Faceit Pocket Stats is your ultimate gaming data hub. Whether
-          you&apos;re a pro or a casual gamer, access key stats, compare
-          performance, and challenge yourself. Join now to level up your gaming
-          journey through data-driven success.
+        <p className={'mx-auto mt-5 md:max-w-xl md:text-center'}>
+          Elevate your Counter-Strike game with Faceit Pocket Stats – the
+          essential app for Faceit platform enthusiasts. Analyze real-time
+          stats, explore player profiles, and track your progress effortlessly.
+          Whether you&apos;re a pro or a rising star, Faceit Pocket Stats
+          empowers you to make data-driven decisions, enhancing gameplay and
+          dominating the competition.
         </p>
       </section>
 
