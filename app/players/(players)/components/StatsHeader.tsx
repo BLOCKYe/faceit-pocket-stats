@@ -186,7 +186,7 @@ const StatsHeader: React.FC<IStatsHeaderProps> = ({
   const storedMatches = useRef(matches?.items);
   const lastMatch = useMemo(() => {
     return getLastMatch(storedMatches.current?.[0]);
-  }, [matches?.items]);
+  }, []);
 
   const counterStrikeHours = useMemo(() => {
     return getPlayedHoursByGameId(SteamGamesAppIds.CS, games);
