@@ -185,7 +185,7 @@ const StatsHeader: React.FC<IStatsHeaderProps> = ({
 }) => {
   const storedMatches = useRef(matches?.items);
   const lastMatch = useMemo(() => {
-    return getLastMatch(matches?.items[0]);
+    return getLastMatch(storedMatches.current?.[0]);
   }, [matches?.items]);
 
   const counterStrikeHours = useMemo(() => {
