@@ -11,8 +11,8 @@ import Divider from '@/app/(common)/components/ui/Divider';
 import { BanDataType } from '@/types/BanTypes';
 import UserSearch from '@/app/(home)/components/UserSearch';
 import ProfileHeader from '@/app/players/(players)/components/ProfileHeader';
-import BansList from '@/app/players/(players)/components/BansList';
-import MatchesList from '@/app/players/(players)/components/MatchesList';
+import BansList from '@/app/players/(players)/components/bans/BansList';
+import MatchesList from '@/app/players/(players)/components/matches/MatchesList';
 import StatsHeader from '@/app/players/(players)/components/StatsHeader';
 import GamesEnum from '@/constants/gamesEnum';
 import { Button } from '@/app/(common)/components/shadcn/ui/button';
@@ -20,6 +20,8 @@ import { getPlayerMatches } from '@/repository/PlayerRepository';
 import { paginationMatchesPerPage } from '@/constants/pagination';
 import { GameType } from '@/types/GamesTypes';
 import { getPlayerGames } from '@/repository/SteamRepository';
+import HeaderButtons from '@/app/players/(players)/components/HeaderButtons';
+import MatchesButtons from '@/app/players/(players)/components/matches/MatchesButtons';
 
 interface IPlayerScreenProps {
   playerId: string;
@@ -98,31 +100,8 @@ const PlayerScreen: React.FC<IPlayerScreenProps> = (props) => {
         <UserSearch withoutLabel />
       </div>
 
-      <div
-        className={'mt-20 flex flex-wrap items-center justify-between gap-3'}>
-        <BackButton
-          link={PATHS.HOME}
-          text={'Back to home page'}
-          type={'left'}
-          shortText={'Home'}
-        />
-        <BackButton
-          shortText={
-            props.game === GamesEnum.CS2
-              ? GamesEnum.CSGO.toUpperCase()
-              : GamesEnum.CS2.toUpperCase()
-          }
-          link={PATHS.PLAYERS.PLAYER_ID(
-            props.playerId,
-            props.game === GamesEnum.CS2 ? GamesEnum.CSGO : GamesEnum.CS2
-          )}
-          text={`${
-            props.game === GamesEnum.CS2
-              ? GamesEnum.CSGO.toUpperCase()
-              : GamesEnum.CS2.toUpperCase()
-          } Statistics`}
-          type={'right'}
-        />
+      <div className={'mt-20 '}>
+        <HeaderButtons playerId={props.playerId} game={props.game} />
       </div>
 
       {/* <--- Profile header ---> */}
@@ -162,30 +141,11 @@ const PlayerScreen: React.FC<IPlayerScreenProps> = (props) => {
           <MatchesList matches={matches.data} page={matchesPage} />
 
           {matches.data?.items?.length !== 0 && (
-            <div
-              className={
-                'mt-3 flex flex-wrap items-center justify-between gap-3'
-              }>
-              <Button
-                disabled={matchesPage === 1}
-                variant={'outline'}
-                size={'sm'}
-                onClick={() => setMatchesPage((old) => old - 1)}>
-                Previous
-              </Button>
-
-              <h1 className={'text-xs text-muted-foreground'}>
-                Page {matchesPage}
-              </h1>
-
-              <Button
-                disabled={getNextPageButtonIsDisabled}
-                variant={'outline'}
-                size={'sm'}
-                onClick={() => setMatchesPage((old) => old + 1)}>
-                Next
-              </Button>
-            </div>
+            <MatchesButtons
+              getNextPageButtonIsDisabled={getNextPageButtonIsDisabled}
+              matchesPage={matchesPage}
+              setMatchesPage={setMatchesPage}
+            />
           )}
         </section>
       </section>

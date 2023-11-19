@@ -1,6 +1,6 @@
 import React from 'react';
 import { BanDataType, BanItemType } from '@/types/BanTypes';
-import BanItem from '@/app/players/(players)/components/BanItem';
+import BanItem from '@/app/players/(players)/components/bans/BanItem';
 import moment from 'moment/moment';
 import { defaultDateTimeFormat } from '@/constants/dateFormat';
 

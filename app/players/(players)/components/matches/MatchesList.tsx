@@ -1,6 +1,6 @@
 import React from 'react';
 import { MatchDataType, MatchItemType } from '@/types/MatchTypes';
-import MatchItem from '@/app/players/(players)/components/MatchItem';
+import MatchItem from '@/app/players/(players)/components/matches/MatchItem';
 import { paginationMatchesPerPage } from '@/constants/pagination';
 
 interface IMatchesListProps {

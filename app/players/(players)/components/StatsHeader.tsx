@@ -127,9 +127,9 @@ const getSummaryByRange = (
  * @param value
  */
 const getTrendIcon = (value: number): React.ReactNode => {
-  if (value > 1) {
+  if (value >= 1) {
     return <FiArrowUpRight className={'mr-2 text-green-500'} />;
-  } else if (value < 1 && value !== 0) {
+  } else if (value < 0) {
     return <FiArrowDownRight className={'mr-2 text-red-500'} />;
   } else {
     return <FiArrowRight className={'mr-2'} />;
