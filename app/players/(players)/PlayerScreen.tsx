@@ -18,6 +18,8 @@ import GamesEnum from '@/constants/gamesEnum';
 import { Button } from '@/app/(common)/components/shadcn/ui/button';
 import { getPlayerMatches } from '@/repository/PlayerRepository';
 import { paginationMatchesPerPage } from '@/constants/pagination';
+import { GameType } from '@/types/GamesTypes';
+import { getPlayerGames } from '@/repository/SteamRepository';
 
 interface IPlayerScreenProps {
   playerId: string;
@@ -27,6 +29,11 @@ interface IPlayerScreenProps {
 const PlayerScreen: React.FC<IPlayerScreenProps> = (props) => {
   const player = useQuery<PlayerDataType>({
     queryKey: ['player' + props.game, props.playerId],
+  });
+
+  const games = useQuery<GameType[]>({
+    queryKey: ['games', props.playerId],
+    queryFn: () => getPlayerGames(player.data?.steam_id_64),
   });
 
   const [matchesPage, setMatchesPage] = useState(1);
@@ -138,6 +145,7 @@ const PlayerScreen: React.FC<IPlayerScreenProps> = (props) => {
           player={player.data}
           matches={matches.data}
           game={props.game}
+          games={games.data}
         />
 
         <Divider className={'my-5'} />

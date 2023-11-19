@@ -27,7 +27,7 @@ const SkillLevel: React.FC<ISkillLevelProps> = (props) => {
   return (
     <div
       className={
-        'flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border-2 bg-opacity-30 p-2 font-bold ' +
+        'flex h-8 w-8 items-center justify-center overflow-hidden rounded border-2 bg-opacity-30 p-2 text-xs font-bold ' +
         getLevelStyles(props.level ?? 0) +
         ` ${props.className} `
       }>

@@ -1,17 +1,48 @@
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useMemo, useRef } from 'react';
 import { Badge } from '@/app/(common)/components/shadcn/ui/badge';
 import { PlayerDataType } from '@/types/PlayerType';
 import { MatchDataType, MatchItemType } from '@/types/MatchTypes';
 import moment from 'moment/moment';
 import { FiArrowDownRight, FiArrowRight, FiArrowUpRight } from 'react-icons/fi';
 import SkillLevel from '@/app/(common)/components/badge/SkillLevel';
-import GamesEnum from '@/constants/gamesEnum';
+import GamesEnum, { SteamGamesAppIds } from '@/constants/gamesEnum';
+import { GameType } from '@/types/GamesTypes';
 
 interface IStatsHeaderProps {
   player?: PlayerDataType;
   matches?: MatchDataType;
   game: GamesEnum;
+  games?: GameType[];
 }
+
+/**
+ * This function is used to get hours for counterstrike
+ * @param games
+ * @param gameId
+ */
+const getPlayedHoursByGameId = (
+  gameId: SteamGamesAppIds,
+  games?: GameType[]
+): { two_weeks: string; all_time: string } => {
+  if (!games || !Array.isArray(games)) {
+    return {
+      two_weeks: '0',
+      all_time: '0',
+    };
+  }
+
+  const counterStrikeHours = games?.find(
+    (game: GameType) => game.appid === gameId
+  );
+
+  const two_weeks = counterStrikeHours?.playtime_2weeks ?? 0;
+  const all_time = counterStrikeHours?.playtime_forever ?? 0;
+
+  return {
+    two_weeks: two_weeks ? (two_weeks / 60).toFixed(1) : '0',
+    all_time: all_time ? (all_time / 60).toFixed(1) : '0',
+  };
+};
 
 /**
  * Returns last match date from now as string ex: 3 days ago
@@ -144,11 +175,16 @@ const StatsHeader: React.FC<IStatsHeaderProps> = ({
   player,
   matches,
   game,
+  games,
 }) => {
   const storedMatches = useRef(matches?.items);
   const lastMatch = useMemo(() => {
     return getLastMatch(matches?.items[0]);
   }, [matches?.items]);
+
+  const counterStrikeHours = useMemo(() => {
+    return getPlayedHoursByGameId(SteamGamesAppIds.CS, games);
+  }, [games]);
 
   return (
     <div>
@@ -165,13 +201,35 @@ const StatsHeader: React.FC<IStatsHeaderProps> = ({
 
       <div className={'mt-3 flex flex-wrap items-center gap-3'}>
         <SkillLevel level={player?.games?.[game]?.skill_level} />
-
-        <Badge variant={'outline'} className={'px-3 py-2 font-normal'}>
-          {player?.games?.[game]?.faceit_elo} ELO
+        <Badge
+          variant={'outline'}
+          className={'gap-1 rounded px-3 py-2 font-normal'}>
+          <strong> {player?.games?.[game]?.faceit_elo}</strong>{' '}
+          <span className={'text-muted-foreground'}>ELO</span>
         </Badge>
+
+        {counterStrikeHours.all_time !== '0' && (
+          <Badge
+            variant={'outline'}
+            className={'gap-1 rounded px-3 py-2 font-normal'}>
+            <strong>{counterStrikeHours.all_time}</strong>
+            <span className={'text-muted-foreground'}>hours played</span>
+          </Badge>
+        )}
+
+        {counterStrikeHours.two_weeks !== '0' && (
+          <Badge
+            variant={'outline'}
+            className={'gap-1 rounded px-3 py-2 font-normal'}>
+            <strong>{counterStrikeHours.two_weeks} </strong>
+            <span className={'text-muted-foreground'}>
+              hours played in last 14 days
+            </span>
+          </Badge>
+        )}
       </div>
 
-      <div className={'mt-5 grid gap-3 md:grid-cols-3 '}>
+      <div className={'mt-5 grid gap-3 md:grid-cols-3'}>
         <div className={'rounded border p-3 text-sm'}>
           <h3 className={'text-xs'}>24h results</h3>
           <div className={'mt-3'}>
