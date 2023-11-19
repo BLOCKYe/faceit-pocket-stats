@@ -7,12 +7,14 @@ import { FiArrowDownRight, FiArrowRight, FiArrowUpRight } from 'react-icons/fi';
 import SkillLevel from '@/app/(common)/components/badge/SkillLevel';
 import GamesEnum, { SteamGamesAppIds } from '@/constants/gamesEnum';
 import { GameType } from '@/types/GamesTypes';
+import { Skeleton } from '@/app/(common)/components/schadcn/ui/skeleton';
 
 interface IStatsHeaderProps {
   player?: PlayerDataType;
   matches?: MatchDataType;
   game: GamesEnum;
   games?: GameType[];
+  isGamesPending?: boolean;
 }
 
 /**
@@ -23,7 +25,10 @@ interface IStatsHeaderProps {
 const getPlayedHoursByGameId = (
   gameId: SteamGamesAppIds,
   games?: GameType[]
-): { two_weeks: string; all_time: string } => {
+): {
+  two_weeks: string;
+  all_time: string;
+} => {
   if (!games || !Array.isArray(games)) {
     return {
       two_weeks: '0',
@@ -176,6 +181,7 @@ const StatsHeader: React.FC<IStatsHeaderProps> = ({
   matches,
   game,
   games,
+  isGamesPending,
 }) => {
   const storedMatches = useRef(matches?.items);
   const lastMatch = useMemo(() => {
@@ -215,6 +221,13 @@ const StatsHeader: React.FC<IStatsHeaderProps> = ({
             <strong>{counterStrikeHours.all_time}</strong>
             <span className={'text-muted-foreground'}>hours played</span>
           </Badge>
+        )}
+
+        {isGamesPending && !games && (
+          <>
+            <Skeleton className='h-[33px] w-[140px] rounded' />
+            <Skeleton className='h-[33px] w-[210px] rounded' />
+          </>
         )}
 
         {counterStrikeHours.two_weeks !== '0' && (

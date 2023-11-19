@@ -125,6 +125,7 @@ const PlayerScreen: React.FC<IPlayerScreenProps> = (props) => {
           matches={matches.data}
           game={props.game}
           games={games.data}
+          isGamesPending={games.isPending}
         />
 
         <Divider className={'my-5'} />
