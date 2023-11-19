@@ -1,6 +1,6 @@
 import { AxiosInstance } from 'axios';
 import { NextResponse } from 'next/server';
-import HttpClientBuilder from '@/lib/HttpClientBuilder';
+import HttpClientBuilder from '@/utils/HttpClientBuilder';
 
 const httpClient: AxiosInstance = new HttpClientBuilder()
   .baseURL(process.env.NEXT_PUBLIC_API_STEAM_URL)

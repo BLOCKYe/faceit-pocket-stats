@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from 'react';
-import { Badge } from '@/components/ui/badge';
+import React, { useEffect, useMemo, useRef } from 'react';
+import { Badge } from '@/app/(common)/components/shadcn/ui/badge';
 import { PlayerDataType } from '@/types/PlayerType';
 import { MatchDataType, MatchItemType } from '@/types/MatchTypes';
 import moment from 'moment/moment';
@@ -12,6 +12,16 @@ interface IStatsHeaderProps {
   matches?: MatchDataType;
   game: GamesEnum;
 }
+
+/**
+ * Returns last match date from now as string ex: 3 days ago
+ * @param match
+ */
+const getLastMatch = (match?: MatchItemType): string | null => {
+  if (!match) return null;
+
+  return moment(match.stats['Updated At']).fromNow();
+};
 
 /**
  * This function is used to
@@ -136,6 +146,9 @@ const StatsHeader: React.FC<IStatsHeaderProps> = ({
   game,
 }) => {
   const storedMatches = useRef(matches?.items);
+  const lastMatch = useMemo(() => {
+    return getLastMatch(matches?.items[0]);
+  }, [matches?.items]);
 
   return (
     <div>
@@ -143,6 +156,12 @@ const StatsHeader: React.FC<IStatsHeaderProps> = ({
       <p className={'mt-1 text-xs text-muted-foreground'}>
         Basic player statistics in {game.toUpperCase()}.
       </p>
+
+      {lastMatch && (
+        <p className={'mt-1 text-xs text-muted-foreground'}>
+          Last match: {lastMatch}
+        </p>
+      )}
 
       <div className={'mt-3 flex flex-wrap items-center gap-3'}>
         <SkillLevel level={player?.games?.[game]?.skill_level} />

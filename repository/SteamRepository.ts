@@ -1,4 +1,4 @@
-import HttpClientBuilder from '@/lib/HttpClientBuilder';
+import HttpClientBuilder from '@/utils/HttpClientBuilder';
 import { AxiosInstance } from 'axios';
 
 const httpClient: AxiosInstance = new HttpClientBuilder()

@@ -1,9 +1,9 @@
 import React from 'react';
 import { MatchItemType } from '@/types/MatchTypes';
-import { Badge } from '@/components/ui/badge';
+import { Badge } from '@/app/(common)/components/shadcn/ui/badge';
 import moment from 'moment';
 import { defaultDateTimeFormat } from '@/constants/dateFormat';
-import { openLink } from '@/lib/openLink';
+import { openLink } from '@/utils/openLink';
 import PATHS from '@/constants/Paths';
 import { FiArrowDownRight, FiArrowUpRight } from 'react-icons/fi';
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/app/(common)/components/shadcn/ui/button';
 import { FaArrowLeftLong, FaArrowRightLong } from 'react-icons/fa6';
 import { useRouter } from 'next/navigation';
 

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/app/(common)/components/shadcn/ui/button';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
@@ -11,7 +11,7 @@ import { BiSearch } from 'react-icons/bi';
 import PATHS from '@/constants/Paths';
 import { useRouter } from 'next/navigation';
 import { useDebouncedCallback } from '@/hooks/useDebouncesCallback';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/app/(common)/components/shadcn/ui/use-toast';
 import Autocomplete, {
   AutoCompleteDataType,
 } from '@/app/(common)/components/inputs/Autocomplete';
@@ -19,8 +19,8 @@ import SkillLevel from '@/app/(common)/components/badge/SkillLevel';
 import GamesEnum from '@/constants/gamesEnum';
 import { SearchPlayerType } from '@/types/PlayerType';
 import Image from 'next/image';
-import { Input } from '@/components/ui/input';
-import SearchQueryFactory from '@/lib/SearchQueryFactory';
+import { Input } from '@/app/(common)/components/shadcn/ui/input';
+import SearchQueryFactory from '@/utils/SearchQueryFactory';
 import { STEAM_URL } from '@/constants/urls';
 
 const SearchSchema = z.object({

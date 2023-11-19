@@ -15,7 +15,7 @@ import BansList from '@/app/players/(players)/components/BansList';
 import MatchesList from '@/app/players/(players)/components/MatchesList';
 import StatsHeader from '@/app/players/(players)/components/StatsHeader';
 import GamesEnum from '@/constants/gamesEnum';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/app/(common)/components/shadcn/ui/button';
 import { getPlayerMatches } from '@/repository/PlayerRepository';
 import { paginationMatchesPerPage } from '@/constants/pagination';
 

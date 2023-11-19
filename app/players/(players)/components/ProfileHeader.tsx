@@ -1,8 +1,8 @@
 import React from 'react';
 import { PlayerDataType } from '@/types/PlayerType';
 import Image from 'next/image';
-import { Button } from '@/components/ui/button';
-import { openLink } from '@/lib/openLink';
+import { Button } from '@/app/(common)/components/shadcn/ui/button';
+import { openLink } from '@/utils/openLink';
 import { BsSteam } from 'react-icons/bs';
 import { SiFaceit } from 'react-icons/si';
 import moment from 'moment';
@@ -35,7 +35,7 @@ const ProfileHeader: React.FC<IProfileHeaderProps> = ({ player }) => {
           </div>
 
           <p className={'mt-2 text-xs text-muted-foreground'}>
-            joined {moment(player.activated_at).format(defaultDateFormat)}
+            joined {moment(player.activated_at).fromNow()}
           </p>
           <p className={'mt-1 text-xs'}>{player.friends_ids.length} friends</p>
         </div>

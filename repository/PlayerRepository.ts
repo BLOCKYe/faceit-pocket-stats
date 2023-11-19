@@ -7,7 +7,7 @@ import {
 import { MatchDataType } from '@/types/MatchTypes';
 import { BanDataType } from '@/types/BanTypes';
 import GamesEnum from '@/constants/gamesEnum';
-import HttpClientBuilder from '@/lib/HttpClientBuilder';
+import HttpClientBuilder from '@/utils/HttpClientBuilder';
 
 const httpClient: AxiosInstance = new HttpClientBuilder()
   .baseURL(process.env.NEXT_PUBLIC_API_FACEIT_URL)
