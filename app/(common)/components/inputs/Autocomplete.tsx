@@ -4,6 +4,7 @@ import { useOnClickOutside } from '@/hooks/useOnClickOutside';
 export type AutoCompleteDataType = {
   name: React.ReactNode;
   id: any;
+  nickName: string
 };
 
 interface IAutocompleteProps

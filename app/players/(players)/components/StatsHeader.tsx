@@ -170,7 +170,9 @@ const getMatchesComponents = (
         {getTrendIcon(wins - loses)} {wins} wins / {loses} loses
       </div>
       <div className={'mt-3 text-xs text-muted-foreground'}>
-        {(kills / deaths).toFixed(2)} KD Ratio
+        {(kills / deaths).toFixed(2)} KD,{' '}
+        {(kills / matchesFromRange.length).toFixed(1)} AVG,{' '}
+        {((wins / (wins + loses)) * 100).toFixed(0)}% WR
       </div>
     </div>
   );
