@@ -18,6 +18,23 @@ interface IPageProps {
   params: { playerId: string; game: GamesEnum };
 }
 
+import type { Metadata, ResolvingMetadata } from 'next';
+
+export async function generateMetadata(
+  { params }: IPageProps,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  // read route params
+  const id = params.playerId;
+
+  // fetch data
+  const player = await getPlayerById(id);
+
+  return {
+    title: `${player.nickname} - Player summary ${params.game.toUpperCase()} - Faceit Pocket Stats`,
+  };
+}
+
 const PlayerPage: React.FC<IPageProps> = async (props) => {
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery({
