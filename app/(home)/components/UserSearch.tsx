@@ -22,6 +22,7 @@ import Image from 'next/image';
 import { Input } from '@/app/(common)/components/shadcn/ui/input';
 import SearchQueryFactory from '@/utils/SearchQueryFactory';
 import { STEAM_URL } from '@/constants/urls';
+import { useLocalStorage } from '@/hooks/useLocalstorage';
 
 const SearchSchema = z.object({
   searchValue: z.string().min(2, {
@@ -64,13 +65,25 @@ interface IUserSearchProps {
 
 const UserSearch: React.FC<IUserSearchProps> = (props) => {
   const router = useRouter();
+  const [lastSearches, setLastSearches] = useLocalStorage<
+    {
+      playerId: string;
+      nickname: string;
+    }[]
+  >('lastSearches', []);
   const { toast } = useToast();
 
   const [playersLists, setPlayersList] = useState<any[]>([]);
 
   const getInfoMutation = useMutation({
     mutationFn: (nickname: string) => getPlayer(nickname),
-    onSuccess: (data) => router.push(PATHS.PLAYERS.PLAYER_ID(data.player_id)),
+    onSuccess: (data) => {
+      handleSetLastSearches({
+        playerId: data.player_id,
+        nickname: data.nickname,
+      });
+      router.push(PATHS.PLAYERS.PLAYER_ID(data.player_id));
+    },
     onError: () =>
       form.setError('searchValue', {
         message: 'A player with the specified name was not found.',
@@ -84,6 +97,7 @@ const UserSearch: React.FC<IUserSearchProps> = (props) => {
         data.map((item) => ({
           id: item.player_id,
           name: <SelectPlayerItem {...item} />,
+          nickName: item.nickname,
         }))
       ),
     onError: () => {
@@ -124,6 +138,25 @@ const UserSearch: React.FC<IUserSearchProps> = (props) => {
     searchPlayerMutation.mutate(value);
   }, 700);
 
+  /**
+   * This function is used to handle set last searches in localstorage
+   * @param data
+   */
+  const handleSetLastSearches = (data: {
+    nickname: string;
+    playerId: string;
+  }): void => {
+    const ITEMS_LIMIT = 10;
+    const itemsCountOnLimit = lastSearches.length >= ITEMS_LIMIT;
+    setLastSearches((prev) => [
+      {
+        playerId: data.playerId,
+        nickname: data.nickname,
+      },
+      ...(itemsCountOnLimit ? prev.slice(0, -1) : prev),
+    ]);
+  };
+
   return (
     <div className={'mt-10'}>
       {!props.withoutLabel && (
@@ -138,9 +171,13 @@ const UserSearch: React.FC<IUserSearchProps> = (props) => {
         onSubmit={form.handleSubmit(handleSubmit)}>
         <Autocomplete
           className={'rounded-r-none'}
-          onSelect={(data: AutoCompleteDataType) =>
-            router.push(PATHS.PLAYERS.PLAYER_ID(data.id))
-          }
+          onSelect={(data: AutoCompleteDataType) => {
+            handleSetLastSearches({
+              nickname: data.nickName,
+              playerId: data.id,
+            });
+            router.push(PATHS.PLAYERS.PLAYER_ID(data.id));
+          }}
           data={playersLists}
           inputComponent={
             <Input
@@ -171,6 +208,23 @@ const UserSearch: React.FC<IUserSearchProps> = (props) => {
       <p className={'mt-2 text-xs text-pink-600'} data-testid={'error-message'}>
         {form.formState.errors.searchValue?.message}
       </p>
+
+      {/* <--- Display last searches ---> */}
+      {lastSearches.length > 0 && (
+        <div className={'mt-1 flex w-full gap-1 overflow-auto'}>
+          {lastSearches.map((item, idx) => (
+            <Button
+              variant={'link'}
+              className={'px-2 text-xs text-muted-foreground'}
+              onClick={() =>
+                router.push(PATHS.PLAYERS.PLAYER_ID(item.playerId))
+              }
+              key={item.playerId + idx}>
+              {item.nickname}
+            </Button>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
