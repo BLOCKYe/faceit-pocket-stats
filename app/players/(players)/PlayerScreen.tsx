@@ -22,6 +22,7 @@ import { GameType } from '@/types/GamesTypes';
 import { getPlayerGames } from '@/repository/SteamRepository';
 import HeaderButtons from '@/app/players/(players)/components/HeaderButtons';
 import MatchesButtons from '@/app/players/(players)/components/matches/MatchesButtons';
+import {useLocalStorage} from "@/hooks/useLocalstorage";
 
 interface IPlayerScreenProps {
   playerId: string;
@@ -100,7 +101,7 @@ const PlayerScreen: React.FC<IPlayerScreenProps> = (props) => {
         <UserSearch withoutLabel />
       </div>
 
-      <div className={'mt-20 '}>
+      <div className={'mt-28'}>
         <HeaderButtons playerId={props.playerId} game={props.game} />
       </div>
 
