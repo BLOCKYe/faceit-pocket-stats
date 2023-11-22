@@ -101,7 +101,7 @@ const PlayerScreen: React.FC<IPlayerScreenProps> = (props) => {
         <UserSearch withoutLabel />
       </div>
 
-      <div className={'mt-28'}>
+      <div className={'mt-24'}>
         <HeaderButtons playerId={props.playerId} game={props.game} />
       </div>
 
