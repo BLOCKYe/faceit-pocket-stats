@@ -68,7 +68,7 @@ const StatsHeader: React.FC<IStatsHeaderProps> = ({
     const toWin = rangeInfo.nextValue
       ? Math.ceil(rangeInfo.nextValue / averageEloForMatch)
       : 0;
-    console.log(toWin);
+
     return (
       <>
         <span>{rangeInfo.nextComponent}</span>
