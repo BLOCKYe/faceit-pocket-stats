@@ -181,6 +181,7 @@ const UserSearch: React.FC<IUserSearchProps> = (props) => {
           data={playersLists}
           inputComponent={
             <Input
+              data-test-id={'search-input'}
               className={'rounded-r-none'}
               autoComplete={'off'}
               placeholder={'Search player...'}
@@ -199,7 +200,8 @@ const UserSearch: React.FC<IUserSearchProps> = (props) => {
           type={'submit'}
           className={'rounded-l-none'}
           disabled={getInfoMutation.isPending}
-          data-testid={'submit-button'}>
+          data-testid={'submit-button'}
+          data-test-id={'submit-button'}>
           <BiSearch className={'text-xl'} />
         </Button>
       </form>

@@ -55,6 +55,7 @@ const ProfileHeader: React.FC<IProfileHeaderProps> = ({ player }) => {
 
       <div className={'mt-5 flex flex-wrap gap-3'}>
         <Button
+          data-test-id={'steam-button'}
           size={'sm'}
           variant={'outline'}
           onClick={() =>
@@ -68,6 +69,7 @@ const ProfileHeader: React.FC<IProfileHeaderProps> = ({ player }) => {
 
         <Button
           size={'sm'}
+          data-test-id={'faceit-button'}
           variant={'outline'}
           onClick={() => openLink(player?.faceit_url.replace('{lang}', 'en'))}>
           <SiFaceit className={'mr-3'} />

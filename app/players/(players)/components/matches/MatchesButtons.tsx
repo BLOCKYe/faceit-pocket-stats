@@ -11,6 +11,7 @@ const MatchesButtons: React.FC<IMatchesButtonsProps> = (props) => {
   return (
     <div className={'mt-3 flex flex-wrap items-center justify-between gap-3'}>
       <Button
+        data-test-id={'previous-page-button'}
         disabled={props.matchesPage === 1}
         variant={'outline'}
         size={'sm'}
@@ -23,6 +24,7 @@ const MatchesButtons: React.FC<IMatchesButtonsProps> = (props) => {
       </h1>
 
       <Button
+        data-test-id={'next-page-button'}
         disabled={props.getNextPageButtonIsDisabled}
         variant={'outline'}
         size={'sm'}

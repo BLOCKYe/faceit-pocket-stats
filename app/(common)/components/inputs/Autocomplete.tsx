@@ -38,7 +38,7 @@ const Autocomplete: React.FC<IAutocompleteProps> = (props) => {
     return props.data.map((item) => (
       <AutocompleteItem key={item.id} data={item} onSelect={props.onSelect} />
     ));
-  }, [props.data]);
+  }, [props.data, props.onSelect]);
 
   return (
     <div className={'w-full'} ref={ref}>
@@ -60,7 +60,7 @@ interface IAutocompleteItemProps {
 
 const AutocompleteItem: React.FC<IAutocompleteItemProps> = (props) => {
   return (
-    <div
+    <div data-test-id={`autocomplete-item-${props.data.nickName}`}
       onClick={() => props.onSelect(props.data)}
       className={'cursor-pointer px-2 py-2 transition-all hover:bg-zinc-900'}>
       {props.data.name}
